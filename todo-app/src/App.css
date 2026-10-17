@@ -1,0 +1,470 @@
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 16px 64px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.user-chip {
+  padding: 0;
+  background: transparent;
+  border-radius: 50%;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--hover);
+  color: var(--subtle);
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.user-chip:hover .avatar {
+  color: var(--text);
+}
+
+/* Base controls */
+input,
+select {
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+/* Replace the native arrow with a small chevron */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5' fill='none' stroke='%23a1a1aa' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1l3 3 3-3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 8px 5px;
+}
+
+input:focus,
+select:focus {
+  border-bottom-color: var(--text);
+}
+
+input::placeholder {
+  color: var(--muted);
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary);
+  color: var(--primary-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--subtle);
+}
+
+button.secondary:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+button:focus-visible,
+input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* Profile */
+.card {
+  margin-bottom: 32px;
+}
+
+.todo-card {
+  padding: 20px 24px 16px;
+  border: 1px solid #ececef;
+  border-radius: 12px;
+}
+
+.profile {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card h2 {
+  margin: 0 0 16px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.profile form {
+  display: grid;
+  gap: 16px;
+}
+
+.profile label {
+  display: grid;
+  gap: 2px;
+  font-size: 0.8rem;
+  color: var(--subtle);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+/* Add form */
+.todo-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.todo-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  font-size: 1.05rem;
+}
+
+.todo-form select {
+  color: var(--subtle);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Filters */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 8px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tab {
+  padding: 4px 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.tab:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+.tab.active {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tab .count {
+  margin-left: 4px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.search {
+  flex: 1;
+  min-width: 140px;
+  max-width: 180px;
+  padding: 4px 0;
+  font-size: 0.85rem;
+  border-bottom-color: transparent;
+}
+
+.search:hover {
+  border-bottom-color: var(--border);
+}
+
+/* Bulk bar */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 8px;
+  margin: 0 -8px;
+}
+
+.select-all {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bulk-actions select {
+  padding: 2px 14px 2px 0;
+  font-size: 0.8rem;
+  color: var(--subtle);
+  border-bottom: none;
+  cursor: pointer;
+}
+
+.bulk-actions button {
+  padding: 2px 0;
+  font-size: 0.8rem;
+}
+
+button.danger {
+  background: transparent;
+  color: var(--danger);
+}
+
+/* List */
+.todo-list {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #ececef;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.todo-item:hover,
+.todo-item.selected {
+  border-color: #e0e0e4;
+  background: var(--hover);
+}
+
+.todo-item.drag-over {
+  box-shadow: inset 0 2px 0 var(--text);
+}
+
+.drag-handle {
+  width: 8px;
+  margin-right: -4px;
+  cursor: grab;
+  color: var(--muted);
+  font-size: 0.8rem;
+  letter-spacing: -3px;
+  user-select: none;
+}
+
+input[type='checkbox'] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.todo-title {
+  flex: 1;
+  cursor: text;
+  overflow-wrap: anywhere;
+}
+
+.status-done .todo-title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.edit-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border-bottom-color: var(--text);
+}
+
+.status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--todo);
+}
+
+.status-in-progress .status-dot {
+  background: var(--progress);
+}
+
+.status-done .status-dot {
+  background: var(--done);
+}
+
+.status-select {
+  padding: 0 14px 0 0;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--subtle);
+  cursor: pointer;
+}
+
+.status-select option,
+.todo-form select option,
+.bulk-actions select option {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.item-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 4px;
+}
+
+.icon-btn:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+.icon-btn.delete:hover {
+  color: var(--danger);
+}
+
+.star {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.star.on {
+  color: var(--progress);
+}
+
+.star.on:hover {
+  color: var(--progress);
+}
+
+.error {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--danger);
+  background: #fef3f2;
+}
+
+.empty {
+  margin: 48px 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Reveal secondary controls on hover, on devices that can hover */
+@media (hover: hover) {
+  .drag-handle,
+  .item-actions,
+  .star:not(.on),
+  .todo-item input[type='checkbox']:not(:checked) {
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .todo-item:hover .drag-handle,
+  .todo-item:hover .item-actions,
+  .todo-item:hover .star,
+  .todo-item:hover input[type='checkbox'],
+  .todo-item:focus-within .item-actions,
+  .todo-item:focus-within .star,
+  .todo-item:focus-within input[type='checkbox'] {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding-top: 32px;
+  }
+
+  .todo-card {
+    padding: 16px;
+  }
+
+  .search {
+    max-width: none;
+  }
+
+  .drag-handle {
+    display: none;
+  }
+}
