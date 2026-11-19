@@ -57,3 +57,51 @@ Final settings: host `127.0.0.1`, port `5433`, user `postgres`, password `postgr
 ### Still to do
 
 - Generate and run the profile migration (`npm run typeorm -- migration:generate src/migrations/profile -d src/data-source.ts`, then `migration:run`).
+
+## 3. Adding authentication (2026-10-24)
+
+**Prompt:** add authentication to the todo project (register, login, refresh, logout, roles), working only on files in `todo-api`. No git or GitHub commands.
+
+### What was there before
+
+- `AuthModule` with `JwtModule.registerAsync` (15m), `JwtStrategy` and the `RefreshToken` entity were already set up.
+- `AuthService` / `AuthController` and `UsersService` / `UsersController` were still the `nest g resource` placeholders.
+- `Role` enum was empty, and `jwt-auth.guard.ts`, `public.decorator.ts` and `current-user.decorator.ts` were empty files.
+
+### How it works
+
+- `POST /api/auth/register` and `/login` return `{ accessToken, refreshToken, user }`. Passwords are hashed with argon2.
+- The access token is a JWT with `{ sub, role }` that expires after 15 minutes. Send it as `Authorization: Bearer <token>`.
+- The refresh token lasts 7 days. Only its SHA-256 hash is stored. `POST /api/auth/refresh` swaps it for a new pair and the old one stops working ("rotation"). `POST /api/auth/logout` revokes it.
+- `GET /api/auth/me` returns `{ id, role }` from the token.
+- `JwtAuthGuard` and `RolesGuard` are registered globally in `app.module.ts`, so every route needs a token unless it has `@Public()`. `@Roles(Role.ADMIN)` limits a route to admins.
+- Todos belong to a user (`ownerId`). Each user only sees and changes their own todos. Someone else's todo returns 404.
+- `GET /api/users` and `PATCH /api/users/:id/role` are admin only.
+- `/api/profile` now also needs a token.
+
+### Files
+
+- **New:** `auth/dto/register.dto.ts`, `login.dto.ts`, `refresh.dto.ts`, `auth/roles.guard.ts` (+ spec), `auth/decorators/roles.decorator.ts`, `users/dto/update-role.dto.ts`, `migrations/1792830164089-AddAuth.ts`, `.env.example`.
+- **Filled in:** `auth/jwt-auth.guard.ts`, `auth/decorators/public.decorator.ts`, `auth/decorators/current-user.decorator.ts`, `users/entities/role.enum.ts` (`USER`, `ADMIN`).
+- **Changed:** `auth.service.ts`, `auth.controller.ts`, `auth.module.ts`, `jwt.strategy.ts`, `refresh-token.entity.ts` (unique `tokenHash`), `user.entity.ts` (role defaults to `USER`, `createdAt`), `users.service.ts`, `users.controller.ts`, `users.module.ts`, `todo.entity.ts` (string uuid `id`, `status`, `createdAt`, cascade delete), `todos.service.ts`, `todos.controller.ts`, `app.module.ts`, `app.controller.ts` (`GET /api` is public), and the auth and users spec files (fake repositories).
+
+### Bugs fixed along the way
+
+- `User` and `Todo` import each other. With ES modules this crashed with "Cannot access 'User' before initialization". Relation fields now use TypeORM's `Relation<...>` type.
+- Todo ids are uuids but the controller used `ParseIntPipe`, so every `/todos/:id` call would return 400. Now `ParseUUIDPipe`.
+
+### Verification
+
+Done on a copy of the project with a local Postgres 16:
+
+- `tsc --noEmit` passes and `npm test` passes (10 files, 14 tests).
+- The migration was generated with `migration:generate` and applied, and a second generate found no changes.
+- Tried by hand: no token gives 401, a duplicate email gives 409, a short password gives 400, a wrong password gives 401, another user's todo gives 404, a USER changing a role gives 403, reusing an old refresh token gives 401, refreshing after logout gives 401, and `GET /users` never returns `passwordHash`.
+
+### Still to do
+
+- Run `npm run migration:run`.
+- Delete the unused scaffold files: `auth/dto/create-auth.dto.ts`, `auth/dto/update-auth.dto.ts`, `auth/entities/auth.entity.ts`, `users/dto/create-user.dto.ts`, `users/dto/update-user.dto.ts`.
+- Make the first admin: register, then `UPDATE users SET role = 'ADMIN' WHERE email = '...';` and log in again.
+- The old `todo` table is no longer used (the app now uses `todos`).
+- Update todo-app to send the `Authorization` header and call refresh.
